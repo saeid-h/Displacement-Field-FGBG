@@ -28,11 +28,8 @@ C.val_log_file = C.log_dir + '/val_' + exp_time + '.log'
 C.link_val_log_file = C.log_dir + '/val_last.log'
 
 """Data Dir and Weight Dir"""
-root_directory = '/'.join(os.getcwd().split('/')[:-3])
-# C.data_source = '/home/saeid/Documents/01-My-Researches/735-Displacement-Field/dataset/nyu_depth_v2_labeled.mat'
-# C.train_test_splits = '/home/saeid/Documents/01-My-Researches/735-Displacement-Field/dataset/nyuv2_splits.mat'
-C.data_source = osp.join(root_directory, 'dataset/nyu_depth_v2_labeled.mat')
-C.train_test_splits = osp.join(root_directory, 'dataset/nyuv2_splits.mat')
+C.data_source = osp.join('/'.join(C.abs_dir.split(osp.sep)[:-3]), 'dataset/nyu_depth_v2_labeled.mat')
+C.train_test_splits = osp.join('/'.join(C.abs_dir.split(osp.sep)[:-3]), 'dataset/nyuv2_splits.mat')
 
 C.is_test = False
 
