@@ -63,14 +63,12 @@ class Engine(object):
 
     def inject_default_parser(self):
         p = self.parser
-        p.add_argument('-d', '--devices', default='',
-                       help='set data parallel training')
-        p.add_argument('-c', '--continue', type=extant_file,
-                       metavar="FILE",
+        p.add_argument('-d', '--devices', default='', help='set data parallel training')
+        p.add_argument('-c', '--continue', type=extant_file, metavar="FILE",
                        dest="continue_fpath",
                        help='continue from one certain checkpoint')
-        p.add_argument('--local_rank', default=0, type=int,
-                       help='process rank on node')
+        p.add_argument('--local_rank', default=0, type=int,help='process rank on node')
+        p.add_argument('-f', '--filename_list', default=None, help='List of image (and gt) filenames.')
 
     def register_state(self, **kwargs):
         self.state.register(**kwargs)

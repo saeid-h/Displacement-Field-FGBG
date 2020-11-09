@@ -114,7 +114,7 @@ def resize_ensure_shortest_edge(img, edge_length,
     return img
 
 
-def random_scale(img, gt, scales):
+def random_scale(img, gt, depth=None, scales=1):
     scale = random.choice(scales)
     if scale > 1:
         interpolation_ = cv2.INTER_CUBIC
@@ -125,8 +125,9 @@ def random_scale(img, gt, scales):
     img = cv2.resize(img, (sw, sh), interpolation=interpolation_)
     gt = cv2.resize(gt, (sw, sh), interpolation=interpolation_)
     gt /= scale
+    depth = None if depth is None else cv2.resize(depth, (sw, sh), interpolation=interpolation_)/scale
 
-    return img, gt, scale
+    return img, gt, depth, scale
 
 
 def random_scale_with_length(img, gt, length):
@@ -139,11 +140,12 @@ def random_scale_with_length(img, gt, length):
     return img, gt, size
 
 
-def random_mirror(img, gt):
+def random_mirror(img, gt, depth=None):
     if random.random() >= 0.5:
         img = cv2.flip(img, 1)
         gt = cv2.flip(gt, 1)
-    return img, gt
+        depth = None if depth is None else cv2.flip(depth, 1)
+    return img, gt, depth
 
 
 def random_rotation(img, gt):
