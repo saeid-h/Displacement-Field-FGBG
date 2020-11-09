@@ -45,7 +45,7 @@ add_path(osp.join(C.root_dir, 'lib'))
 """Image Config"""
 C.image_mean = np.array([0.485, 0.456, 0.406])  # 0.485, 0.456, 0.406
 C.image_std = np.array([0.229, 0.224, 0.225])
-C.use_gauss_blur = True
+C.use_gauss_blur = False
 C.gaussian_kernel_range = [.3, 1]
 C.max_kernel = 51
 C.downsampling_scale = 8

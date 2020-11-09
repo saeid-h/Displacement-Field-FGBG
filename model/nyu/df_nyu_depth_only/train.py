@@ -50,6 +50,7 @@ with Engine(custom_parser=parser) as engine:
                 BatchNorm2d, config.bn_eps, config.bn_momentum)
     base_lr = config.lr
 
+    config.niters_per_epoch = len(train_loader.dataset)
     total_iteration = config.nepochs * config.niters_per_epoch
     lr_policy = PolyLR(base_lr, config.lr_power, total_iteration)
 

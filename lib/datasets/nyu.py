@@ -15,31 +15,12 @@ from PIL import Image
 
 import torch.utils.data as data
 
-
-def depth_read(filename):
-    """ Read depth data from file, return as numpy array. """
-    TAG_FLOAT = 202021.25
-    TAG_CHAR = 'PIEH'
-    f = open(filename,'rb')
-    check = np.fromfile(f,dtype=np.float32,count=1)[0]
-    assert check == TAG_FLOAT, ' depth_read:: Wrong tag in flow file (should be: {0}, is: {1}). Big-endian machine? '.format(TAG_FLOAT,check)
-    width = np.fromfile(f,dtype=np.int32,count=1)[0]
-    height = np.fromfile(f,dtype=np.int32,count=1)[0]
-    size = width*height
-    assert width > 0 and height > 0 and size > 1 and size < 100000000, ' depth_read:: Wrong input size (width = {0}, height = {1}).'.format(width,height)
-    depth = np.fromfile(f,dtype=np.float32,count=-1).reshape((height,width))
-    return depth
-
-
 class NYUDataset(data.Dataset):
     def __init__(self, setting, split_name, preprocess=None,
                  file_length=None, filename_list=None):
         super(NYUDataset, self).__init__()
         self._split_name = split_name
-        self._imgs_source, self._labels_source = self._load_data_file(setting['data_source'])
-        self._train_test_splits = self._load_split_file(setting['train_test_splits'])
-        self._file_names = self._get_file_names(split_name, self._train_test_splits)
-        self._file_length = file_length
+        self._file_length = None
         self.preprocess = preprocess
         self._filename_list = filename_list
         if self._filename_list is not None:
@@ -57,6 +38,11 @@ class NYUDataset(data.Dataset):
             self.img_list.sort()
             self.gt_list.sort()
             self.depth_list.sort()
+        else:
+            self._split_name = split_name
+            self._imgs_source, self._labels_source = self._load_data_file(setting['data_source'])
+            self._train_test_splits = self._load_split_file(setting['train_test_splits'])
+            self._file_names = self._get_file_names(split_name, self._train_test_splits)
 
     def __len__(self):
         if self._file_length is not None:
