@@ -40,7 +40,7 @@ with Engine(custom_parser=parser) as engine:
     seed = config.seed
     torch.manual_seed(seed)
 
-    train_loader, train_sampler = get_train_loader(engine, NYUDataset)
+    train_loader, train_sampler = get_train_loader(engine, NYUDataset, args.filename_list)
 
     criterion = Mseloss()
     BatchNorm2d = nn.BatchNorm2d
