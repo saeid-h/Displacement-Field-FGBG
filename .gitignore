@@ -76,3 +76,4 @@ models
 log
 model/nyu/df_nyu_depth_only/log
 model/nyu/df_nyu_rgb_guidance/log
+results
