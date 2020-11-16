@@ -23,17 +23,22 @@ class NYUDataset(data.Dataset):
         self._file_length = None
         self.preprocess = preprocess
         self._filename_list = filename_list
+        self.img_list = None
+        self.gt_list = None
+        self.depth_list = None
         if self._filename_list is not None:
             with open(filename_list, 'r') as f:
                 lines = f.readlines()
             if split_name == 'train':
                 self.img_list = [osp.join('../../../dataset/sync', x.split(' ')[0]) for x in lines]
                 self.gt_list = [osp.join('../../../dataset/sync', x.split(' ')[1]) for x in lines]
-                self.depth_list = [osp.join('../../../dataset/nyu/bts_depth', 
+                self.depth_list = [osp.join('../../../dataset/nyu/bts_depth_train', 
                                 x.split(' ')[0].replace(osp.sep,'_').replace('.jpg','.png')) for x in lines]
             else:
                 self.img_list = [osp.join('../../../dataset/nyu', split_name, x.split(' ')[0]) for x in lines]
                 self.gt_list = [osp.join('../../../dataset/nyu', split_name, x.split(' ')[1]) for x in lines]
+                self.depth_list = [osp.join('../../../dataset/nyu/bts_depth_test/raw', 
+                                x.split(' ')[0].replace(osp.sep,'_').replace('.jpg','.png')) for x in lines]
             
             self.img_list.sort()
             self.gt_list.sort()
@@ -108,8 +113,8 @@ class NYUDataset(data.Dataset):
             return img, gt
         else:
             img = np.array(Image.open(self.img_list[index])).astype('float32')
-            gt = np.array(Image.open(self.gt_list[index])).astype('float32') * 1000 / 65535
-            depth = np.array(Image.open(self.depth_list[index])).astype('float32') * 1000 / 65535
+            gt = np.array(Image.open(self.gt_list[index])).astype('float32')  / 1000 #* 1000 / 65535
+            depth = np.array(Image.open(self.depth_list[index])).astype('float32') / 1000 #* 1000 / 65535
             # depth = depth_read(self.depth_list[index])
             return img, gt, depth
         

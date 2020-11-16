@@ -69,6 +69,9 @@ class Engine(object):
                        help='continue from one certain checkpoint')
         p.add_argument('--local_rank', default=0, type=int,help='process rank on node')
         p.add_argument('-f', '--filename_list', default=None, help='List of image (and gt) filenames.')
+        p.add_argument('--save_path', default=None, help='Path to save test results.')
+        p.add_argument('--model_name', default='DF', help='Model name.')
+
 
     def register_state(self, **kwargs):
         self.state.register(**kwargs)
