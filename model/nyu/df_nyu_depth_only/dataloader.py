@@ -55,18 +55,18 @@ class TestPre(object):
         # self.target_size = target_size
         # self.use_gauss_blur = use_gauss_blur
 
-    def __call__(self, img, gt):
+    def __call__(self, img, gt, depth=None):
         img = rgb2gray(img)
         img = img / 255.
         p_mask = np.zeros(gt.shape)
         p_mask[gt > 0] = 1
-        p_depth = gt.copy()
-        p_gt = normalize_depth(gt)
-        p_depth = normalize_depth(p_depth)
+        if depth is None: p_depth = gt.copy()
+        # p_depth = normalize_depth(depth)
+        depth = np.expand_dims(depth, axis=0)
+        # p_gt = normalize_depth(gt)
         p_img = np.expand_dims(img, axis=0)
-        p_depth = np.expand_dims(p_depth, axis=0)
         extra_dict = None
-        return p_img, p_depth, p_gt, p_mask, extra_dict
+        return p_img, depth, gt, p_mask, extra_dict
 
 def get_train_loader(engine, dataset, filename_list=None):
     data_setting = {'data_source': config.data_source,
@@ -91,13 +91,13 @@ def get_train_loader(engine, dataset, filename_list=None):
     return train_loader, train_sampler
 
 
-def get_test_loader(engine, dataset):
+def get_test_loader(engine, dataset, filename_list=None):
     data_setting = {'data_source': config.data_source,
                     'train_test_splits': config.train_test_splits}
     test_preprocess = TestPre(config.image_mean, config.image_std)
-    test_dataset = dataset(data_setting, "test", test_preprocess)
+    test_dataset = dataset(data_setting, "test", test_preprocess, filename_list=filename_list)
     test_loader = data.DataLoader(test_dataset,
                                    batch_size=1,
                                    num_workers=config.num_workers,
                                    shuffle=False)
-    return test_loader, None
+    return test_loader, test_dataset
