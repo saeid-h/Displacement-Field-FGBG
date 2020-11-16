@@ -71,7 +71,8 @@ class Engine(object):
         p.add_argument('-f', '--filename_list', default=None, help='List of image (and gt) filenames.')
         p.add_argument('--save_path', default=None, help='Path to save test results.')
         p.add_argument('--model_name', default='DF', help='Model name.')
-
+        p.add_argument('--load_ckpt', default=None, help='Checkpoint location.')
+        p.add_argument('--dataset', default='nyu', help='Dataset name: nyu, replica, ...')
 
     def register_state(self, **kwargs):
         self.state.register(**kwargs)

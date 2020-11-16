@@ -13,6 +13,7 @@ from config import config
 from dataloader import get_train_loader
 from df import Displacement_Field
 from datasets.nyu import NYUDataset
+from datasets.replica import ReplicaDataset
 
 from utils.init_func import init_weight
 from misc.utils import get_params
@@ -40,7 +41,10 @@ with Engine(custom_parser=parser) as engine:
     seed = config.seed
     torch.manual_seed(seed)
 
-    train_loader, train_sampler = get_train_loader(engine, NYUDataset, args.filename_list)
+    if args.dataset.lower() == 'nyu':
+        train_loader, train_sampler = get_train_loader(engine, NYUDataset, args.filename_list)
+    elif args.dataset.lower() == 'replica':
+        train_loader, train_sampler = get_train_loader(engine, ReplicaDataset, args.filename_list)
 
     criterion = Mseloss()
     BatchNorm2d = nn.BatchNorm2d

@@ -11,6 +11,7 @@ from config import config
 from dataloader import get_test_loader
 from df import Displacement_Field
 from datasets.nyu import NYUDataset
+from datasets.replica import ReplicaDataset
 
 from utils.init_func import init_weight
 from misc.utils import get_params
@@ -88,14 +89,17 @@ with Engine(custom_parser=parser) as engine:
     seed = config.seed
     torch.manual_seed(seed)
 
-    test_loader, test_dataset = get_test_loader(engine, NYUDataset, filename_list=args.filename_list)
+    if args.dataset.lower() == 'nyu':
+        train_loader, train_sampler = get_train_loader(engine, NYUDataset, args.filename_list)
+    elif args.dataset.lower() == 'replica':
+        train_loader, train_sampler = get_train_loader(engine, ReplicaDataset, args.filename_list)
     config.niters_per_epoch = len(test_loader.dataset)
 
     BatchNorm2d = nn.BatchNorm2d
 
     model = Displacement_Field()
     model_dict = model.state_dict()
-    trained_model_path = os.path.join(config.root_dir, 'models/nyu_df_bts_d_base', 'epoch-19.pth')
+    trained_model_path = os.path.join(config.root_dir, 'models/df_nyu_depth_only/snapshot', 'epoch-10.pth')
     trained_model_dict = torch.load(trained_model_path, map_location=lambda storage, loc: storage)
     model_weights = {k: v for k, v in trained_model_dict.items() if k in model_dict}
     model_dict.update(model_weights)
