@@ -37,7 +37,7 @@ class ReplicaDataset(data.Dataset):
         return len(self.img_list)
 
     def __getitem__(self, index):
-       img, gt, depth = self._fetch_data(index)    
+        img, gt, depth = self._fetch_data(index)    
         if self.preprocess is not None:
             img, depth, gt, mask, extra_dict = self.preprocess(img, gt, depth)
 

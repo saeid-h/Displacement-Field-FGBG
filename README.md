@@ -25,23 +25,23 @@ sh download.sh
 ```bash
 #Use depth only as input
 cd model/nyu/df_nyu_depth_only
-python train.py -d 0 -f <path-to-list-file>
+python train.py -d 0 -f <path-to-list-file> --dataset nyu
 
 #Use RGB image as guidance
 cd model/nyu/df_nyu_rgb_guidance
-python train.py -d 0
+python train.py -d 0 -f <path-to-list-file> --dataset nyu
 ```
 
 
-## Training
+## Testing
 ```bash
 #Use depth only as input
 cd model/nyu/df_nyu_depth_only
-python test.py -d 0 --save_path <path-to-result> -f <path-to-list-file> --load_ckpt <path-checkpoint>
+python test.py -d 0 --dataset nyu --save_path <path-to-result> -f <path-to-list-file> --load_ckpt <path-checkpoint>
 
 #Use RGB image as guidance
 cd model/nyu/df_nyu_rgb_guidance
-python train.py -d 0
+python train.py -d 0 --dataset nyu --save_path <path-to-result> -f <path-to-list-file> --load_ckpt <path-checkpoint>
 ```
 
 ## Citation
