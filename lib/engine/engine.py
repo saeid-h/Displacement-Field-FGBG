@@ -73,6 +73,8 @@ class Engine(object):
         p.add_argument('--model_name', default='DF', help='Model name.')
         p.add_argument('--load_ckpt', default=None, help='Checkpoint location.')
         p.add_argument('--dataset', default='nyu', help='Dataset name: nyu, replica, ...')
+        p.add_argument('--loss_type', default='depth', help='Loss function: depth, fgbg, combined.')
+        p.add_argument('--depth_weight', default=0.5, help='Loss weight for combined loss.')
 
     def register_state(self, **kwargs):
         self.state.register(**kwargs)

@@ -123,6 +123,7 @@ with Engine(custom_parser=parser) as engine:
         os.system ('mkdir -p '+os.path.join(outpath, 'occ_mask_final'))
         os.system ('mkdir -p '+os.path.join(outpath, 'occ_mask_gt'))
 
+    # dict(guidance=img, data=depth, label=gt, mask=mask, n=len(self.img_list))
     bar_format = '{desc}[{elapsed}<{remaining},{rate_fmt}]'
     pbar = tqdm(range(config.niters_per_epoch), file=sys.stdout, bar_format=bar_format)
     dataloader = iter(test_loader)
@@ -139,9 +140,6 @@ with Engine(custom_parser=parser) as engine:
         pred = model(deps)
         depth = pred.data.cpu().numpy()[0,0,...] 
         
-        # print (depth.shape, gt.shape, config.root_dir)
-        # print (gt[gt>0], depth[gt>0])
-        
         if args.save_path: save_preds(outpath, test_dataset.img_list[idx], depth, gt)
 
         # fig = plt.figure()
@@ -149,8 +147,7 @@ with Engine(custom_parser=parser) as engine:
         # fig.colorbar(ii)
         # plt.show()
 
-        print_str = ' Image {}/{}:'.format(idx + 1, config.niters_per_epoch) \
-
+        print_str = ' Image {}/{}:'.format(idx + 1, config.niters_per_epoch) 
         pbar.set_description(print_str, refresh=False)
 
 
